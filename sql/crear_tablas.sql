@@ -1,0 +1,29 @@
+-- crear_tablas.sql
+CREATE DATABASE IF NOT EXISTS incidencia_cr;
+USE incidencia_cr;
+
+CREATE TABLE IF NOT EXISTS users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(50) NOT NULL,
+  rol ENUM('USER','ADMIN') NOT NULL DEFAULT 'USER'
+);
+
+CREATE TABLE IF NOT EXISTS stops (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(100),
+  canton VARCHAR(50),
+  lat DECIMAL(9,6),
+  lon DECIMAL(9,6)
+);
+
+CREATE TABLE IF NOT EXISTS incidents (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT,
+  stop_id INT,
+  type VARCHAR(50),
+  description TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  status ENUM('PENDING','RESOLVED','INVALID') DEFAULT 'PENDING',
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (stop_id) REFERENCES stops(id)
+);
